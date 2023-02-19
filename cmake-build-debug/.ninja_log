@@ -1,0 +1,21 @@
+# ninja log v5
+3	481	6984875814363295	CMakeFiles/Program3.dir/Message.cpp.obj	10065bfeff15e69
+1	643	6984814737343808	CMakeFiles/Program3.dir/main.cpp.obj	9b7abe5c8b65f3ac
+3	380	6984900072857311	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+2	349	6984899244767674	CMakeFiles/Program3.dir/Contact.cpp.obj	b5b371c327f2ba6a
+1	186	6984901064308728	build.ninja	d523bed93d1ad0c
+381	503	6984900074003977	Program3.exe	8dcf7afec06f3f9c
+9	627	6984937662806285	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+3	969	6984937666237384	CMakeFiles/Program3.dir/Message.cpp.obj	10065bfeff15e69
+970	1125	6984937667743521	Program3.exe	36fcf009a89bafc2
+8	671	6984938885105079	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+3	937	6984938887731455	CMakeFiles/Program3.dir/Message.cpp.obj	10065bfeff15e69
+938	1164	6984938889784883	Program3.exe	36fcf009a89bafc2
+3	582	6984939629837703	CMakeFiles/Program3.dir/Message.cpp.obj	10065bfeff15e69
+583	720	6984939631169521	Program3.exe	36fcf009a89bafc2
+3	746	6984941333946817	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+747	923	6984941335639673	Program3.exe	36fcf009a89bafc2
+4	584	6984941888802452	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+584	713	6984941890053897	Program3.exe	36fcf009a89bafc2
+3	810	6984941989590724	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+811	979	6984941991270114	Program3.exe	36fcf009a89bafc2

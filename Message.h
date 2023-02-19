@@ -10,7 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
-#include <array>
+#include <map>
 using namespace std;
 
 class Message
@@ -30,6 +30,7 @@ private:
                                                         date(nullptr)
         {
             createDate();
+
         }
 
 
@@ -65,25 +66,26 @@ private:
     int msgNum;          // The number of this message in users inbox.
 
     void destroy(){if(data) delete data;}
+    static int generateMsgNum(){return (rand() % 1500) + 1;}
 
 public:
     Message();
     Message(const Message &);
     Message& operator=(const Message &);
     ~Message();
-    void setSender(const string &);
-    void setMsgType(const string &);
+    bool setSender(const string &);
+    bool setMsgType(const string &);
     // use string class += on the contact tag
     // the tag will be their preffered contact and also the message type
-    void inheritMsgType(const Contact &);
-    void setMsgContent(const string &);
-    void setMsgDate(const string &);
-    void setAllData(const array<string,4>&);
-    string& getSender() const {return *data->sender;}
-    string& getMsgType() const {return *data->date;}
-    string& getMsgContent() const {return *data->content;}
-    string& getMsgDate() const {return *data->date;}
-    const array<string, 4> getAllData() const;
+    bool inheritMsgType(Contact &);
+    bool setMsgContent(const string &);
+    bool setMsgDate(const string &);
+    bool setAllData(const map<int,string>&);
+    bool getSender( string &) const ;
+    bool getMsgType( string &) const;
+    bool getMsgContent( string &) const;
+    bool getMsgDate( string &) const;
+    map<int, string> getAllData() const;
 
 
 

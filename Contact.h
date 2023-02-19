@@ -11,7 +11,52 @@
 
 #ifndef PROGRAM3_CONTACT_H
 #define PROGRAM3_CONTACT_H
+#include <string>
+#include <iostream>
+#include <vector>
+using namespace std;
 
 class Contact
-{};
+{
+private:
+
+    struct node
+    {
+        string *  name;
+        string *  contact_type;
+        string *  contact_handle;
+
+        node():name(nullptr),contact_type(nullptr),contact_handle(nullptr)
+        {}
+
+        ~node()
+        {
+           if(name)
+               delete name;
+           if(contact_type)
+               delete contact_type;
+           if(contact_handle)
+               delete contact_handle;
+
+           name = contact_handle = contact_type = nullptr;
+        }
+    };
+
+    node * info;
+
+public:
+    Contact();
+    Contact(const Contact &);
+    Contact& operator=(const Contact &);
+    ~Contact();
+    friend ostream& operator<<(ostream &, Contact &);
+    bool setName(const string *);
+    bool setType(const string *);
+    bool setHandle(const string *);
+    void getName(string &);
+    void getType(string &);
+    void getHandle(string &);
+
+};
+
 #endif //PROGRAM3_CONTACT_H

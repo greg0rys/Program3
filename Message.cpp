@@ -36,29 +36,29 @@ string Message::message_data::generateMonth()
         case 1:
             monthName =  "Jan ";
         case 2:
-            monthName += "Feb ";
+            monthName = "Feb ";
         case 3:
-            monthName += "Mar ";
+            monthName = "Mar ";
         case 4:
-            monthName += "Apr ";
+            monthName = "Apr ";
         case 5:
-            monthName += "May ";
+            monthName = "May ";
         case 6:
-            monthName += "June ";
+            monthName = "June ";
         case 7:
-            monthName += "July ";
+            monthName = "July ";
         case 8:
-            monthName += "Aug ";
+            monthName = "Aug ";
         case 9:
-            monthName += "Sept ";
+            monthName = "Sept ";
         case 10:
-            monthName += "Oct ";
+            monthName = "Oct ";
         case 11:
-            monthName += "Nov ";
+            monthName = "Nov ";
         case 12:
-            monthName += "Dec ";
+            monthName = "Dec ";
         default:
-            monthName += "May ";
+            monthName = "May ";
     }
 
     return monthName;
@@ -66,7 +66,9 @@ string Message::message_data::generateMonth()
 
 
 // default constructor
-Message::Message():data(nullptr),isRead(false),msgNum(0)
+Message::Message():data(new message_data()),
+                   isRead(false),
+                   msgNum(generateMsgNum())
 {}
 
 
@@ -82,58 +84,38 @@ Message& Message::operator=(const Message &msg)
 {
     if(this == &msg)
         return *this;
-    array<string, 4> msgDat = msg.getAllData();
-    int idx = 0;
-
-    typedef message_data * md;
-    md temp = msg.data;
 
     if(data)
-        destroy();
+        delete data;
 
     if(!msg.data)
     {
         data = nullptr;
-        isRead = msg.isRead;
-        msgNum = msg.msgNum;
         return *this;
     }
 
-    // test this
-    if(temp->hasAllVals())
-    {
-        data = new message_data();
-        data->sender = new string(msgDat[idx++]);
-        data->msgType = new string(msgDat[idx++]);
-        data->content = new string(msgDat[idx++]);
-        data->date = new string(msgDat[idx++]);
-    }
-    else
-    {
-        data = new message_data();
-        if(temp->hasSender())
-            data->sender = new string(msgDat[idx++]);
-        else
-            data->sender = nullptr;
-        if(temp->hasMsgType())
-            data->msgType = new string(msgDat[idx++]);
-        else
-            data->msgType = nullptr;
-        if(temp->hasContent())
-            data->content = new string(msgDat[idx++]);
-        else
-            data->content = nullptr;
-        if(temp->hasDate())
-            data->date = new string(msgDat[idx++]);
-        else
-            data->date = nullptr;
-    }
+    map<int,string> msg_dt = msg.getAllData();
+    data = new message_data();
 
+    for(auto it = msg_dt.begin(); it != msg_dt.end(); it++)
+    {
+        int key = it->first;
+        if(key == 0)
+            data->sender = new string(it->second);
+        if(key == 1)
+            data->msgType = new string(it->second);
+        if(key == 2)
+            data->content = new string(it->second);
+        if(key == 3)
+            setMsgDate(it->second);
+    }
 
     isRead = msg.isRead;
     msgNum = msg.msgNum;
 
     return *this;
+
+
 
 }
 
@@ -142,20 +124,80 @@ Message& Message::operator=(const Message &msg)
  * return an array of all message data attributes
  * @return std::array<string,4> an array of strings
  */
-const array<string, 4> Message::getAllData() const
+map<int, string> Message::getAllData() const
 {
-    string vals[] = {getSender(), getMsgType(), getMsgContent(),getMsgDate()};
-    array<string, 4> msgDat;
-    int idx = 0;
+    map<int,string> msgDat;
 
-    for(auto & x : msgDat)
+    if(!data)
+        return msgDat;
+   string from,type,cont,date;
+   getSender(from);
+   getMsgType(type);
+   getMsgContent(cont);
+   getMsgDate(date);
+
+   string temp[] = {from,type,cont,date};
+
+    for(auto x = 0; x < 4; x++)
     {
-        x = vals[idx];
+        msgDat.insert(pair<int,string>(x,temp[x]));
     }
 
     return msgDat;
 }
 
+
+bool Message::getSender(string & from) const
+{
+    if(!data->sender)
+    {
+        from = "null sender";
+        return false;
+    }
+
+    from = *(data->sender);
+    return true;
+}
+
+
+bool Message::getMsgType(string & type) const
+{
+    if(!data->msgType)
+    {
+        type = "null type";
+        return false;
+    }
+
+    type = *(data->msgType);
+    return true;
+}
+
+
+bool Message::getMsgContent(string & content) const
+{
+    if(!data->content)
+    {
+        content = "null content";
+        return false;
+    }
+
+    content = *(data->content);
+    return true;
+
+}
+
+
+bool Message::getMsgDate(string & dt) const
+{
+    if(!data->date)
+    {
+        dt = "null date";
+        return false;
+    }
+
+    dt = *(data->date);
+    return true;
+}
 
 // class destructor
 Message::~Message()
@@ -171,12 +213,18 @@ Message::~Message()
  * set the sender of this message object
  * @param from - a string representing the senders name
  */
-void Message::setSender(const std::string &from)
+bool Message::setSender(const std::string &from)
 {
-    if(data->sender)
-        delete data->sender;
+    if(!data)
+    {
+        return false;
+    }
 
-    data->sender = new string(from);
+    if(!data->sender)
+        data->sender = new string(from);
+    else
+        *data->sender = from;
+    return true;
 }
 
 
@@ -184,11 +232,18 @@ void Message::setSender(const std::string &from)
  * set the type of message this is i.e Text, Facebook, Reddit, Twitter.. etc
  * @param type - a string representing the message type.
  */
-void Message::setMsgType(const std::string &type)
+bool Message::setMsgType(const std::string &type)
 {
-    if(data->msgType)
-        delete data->msgType;
-    data->msgType = new string(type);
+    if(!data)
+    {
+        return false;
+    }
+
+    if(!data->msgType)
+         data->msgType = new string(type);
+    else
+        *data->msgType = type;
+    return true;
 }
 
 
@@ -198,13 +253,22 @@ void Message::setMsgType(const std::string &type)
  * to be of type facebook.
  * @param aContact a reference to a contact object with a preferred contact.
  */
-void Message::inheritMsgType(const Contact &aContact)
+bool Message::inheritMsgType( Contact &aContact)
 {
-    if(!aContact->hasType())
-        return;
-    if(data->hasMsgType())
-        delete data->msgType;
-    data->msgType = new string(aContact.getPrefferedMethod());
+    if(!data)
+        return false;
+    string type;
+    aContact.getType(type);
+
+    if( type == "null type")
+        return false;
+
+    if(!data->msgType)
+        data->msgType = new string(type);
+    else
+        *data->msgType = type;
+
+    return true;
 }
 
 
@@ -212,11 +276,16 @@ void Message::inheritMsgType(const Contact &aContact)
  * Set this messages content
  * @param message a string representing this messages content
  */
-void Message::setMsgContent(const std::string &message)
+bool Message::setMsgContent(const std::string &message)
 {
-    if(data->content)
-        delete data->content;
-    data->content = new string(message);
+    if(!data)
+        return false;
+
+    if(!data->content)
+        data->content = new string(message);
+    else
+        *data->content = message;
+    return true;
 }
 
 
@@ -224,11 +293,17 @@ void Message::setMsgContent(const std::string &message)
  * Set this messages date
  * @param a string representing the date this message was sent in M/DD/YYYY
  */
-void Message::setMsgDate(const std::string &new_date)
+bool Message::setMsgDate(const std::string &new_date)
 {
-    if(data->hasDate())
-        delete data->date;
-    data->date = new string(new_date);
+    if(!data)
+        return false;
+
+    if(!data->date)
+        data->date = new string(new_date);
+    else
+        *data->date = new_date;
+
+    return true;
 }
 
 
@@ -237,35 +312,38 @@ void Message::setMsgDate(const std::string &new_date)
  * @param &values an std::array with the values we wish to set our
  * attributes too.
  */
-void Message::setAllData(const array<string,4>& values)
+bool Message::setAllData(const map<int,string>& values)
 {
     if(data)
         destroy();
+
     data = new message_data();
 
-    for(auto x = 0; x < message_data::data_count; x++)
+    for(const auto & it : values)
     {
-        switch(x)
-        {
-            case 0:
-                data->sender = new string(values[x]);
-            case 1:
-                data->msgType = new string(values[x]);
-            case 2:
-                data->content = new string(values[x]);
-            case 3:
-                data->date = new string(values[x]);
-            default:
-                continue;
-        }
+        int key = it.first;
+        string value = it.second;
+        if(key == 0)
+            data->sender = new string(value);
+        if(key == 1)
+            data->msgType = new string(value);
+        if(key == 2)
+            data->content = new string(value);
+        // because date is created at construct
+        // we only need to update its value, not init.
+        if(key == 3)
+            setMsgDate(value);
     }
+
+    return true;
+
 }
 
 
 // overloaded << operator to print all message data at stream extraction.
 ostream& operator<<(ostream &out, Message &msg)
 {
-    if(!msg.data)
+    if(!msg.data->hasAllVals())
     {
         out << " No message! ";
         return out;
@@ -274,6 +352,7 @@ ostream& operator<<(ostream &out, Message &msg)
     out << "Message " << msg.msgNum << "\n\tFrom: " << *msg.data->sender <<
         "\n\tSource: " << *msg.data->msgType << "\n\tMessage: \n\t"
         << *msg.data->content << endl;
+    cout << *msg.data->date;
     out << "****** END OF MESSAGE " << to_string(msg.msgNum) << " ******\n";
 
     return out;

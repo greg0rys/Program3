@@ -3,4 +3,4 @@ project(Program3)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Program3 main.cpp Message.h Message.cpp Contact.cpp Contact.h)
+add_executable(Program3 Message.h Message.cpp Contact.cpp Contact.h driver.cpp)
