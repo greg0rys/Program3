@@ -13,7 +13,7 @@
 #define PROGRAM3_CONTACT_H
 #include <string>
 #include <iostream>
-#include <vector>
+#include <map>
 #include "Message.h"
 
 using namespace std;
@@ -45,7 +45,7 @@ private:
     };
 
     node * info;
-    vector<Message> * messages;
+    map<int,Message> * messages;
 
 public:
     Contact();
@@ -56,7 +56,7 @@ public:
     bool setName(const string *);
     bool setType(const string *);
     bool setHandle(const string *);
-    bool addMessage(const Message *);
+    bool addMessage(Message &);
     void getName(string &);
     void getType(string &);
     void getHandle(string &);

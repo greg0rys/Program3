@@ -23,6 +23,7 @@ Contact& Contact::operator=(const Contact & contact)
     if(this == &contact)
         return *this; // handle self assignment.
 
+        int count = 0;
 
         if(info)
             delete info;
@@ -32,12 +33,16 @@ Contact& Contact::operator=(const Contact & contact)
 
         if(contact.messages)
         {
-            messages = new vector<Message>;
-            for(auto it = contact.messages->begin(); it != contact
-            .messages->end(); it++)
+            messages = new map<int,Message>;
+            for(auto &x : *contact.messages)
             {
-                for
+                messages->insert(pair<int,Message>(x.first, x.second));
             }
+
+        }
+        else
+        {
+            messages = nullptr;
         }
 
 
@@ -81,11 +86,11 @@ ostream& operator<<(ostream &out, Contact &ct)
 }
 
 
-bool Contact::addMessage(const Message * msg)
+bool Contact::addMessage(Message & msg)
 {
     if(!messages)
-        messages = new vector<Message>;
-    messages->push_back(*msg);
+        messages = new map<int,Message>;
+    messages->insert(pair<int,Message>(msg.getMNum(), msg));
 
     return true;
 }
