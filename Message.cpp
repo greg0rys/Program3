@@ -122,7 +122,7 @@ Message& Message::operator=(const Message &msg)
 
 /*
  * return an array of all message data attributes
- * @return std::array<string,4> an array of strings
+ * @return std::map<string,4> an array of strings
  */
 map<int, string> Message::getAllData() const
 {
@@ -246,30 +246,6 @@ bool Message::setMsgType(const std::string &type)
     return true;
 }
 
-
-/*
- * Set the message type based on the contacts preferred contact method.
- * IE - if the contacts preferred method is Facebook, then set this message
- * to be of type facebook.
- * @param aContact a reference to a contact object with a preferred contact.
- */
-bool Message::inheritMsgType( Contact &aContact)
-{
-    if(!data)
-        return false;
-    string type;
-    aContact.getType(type);
-
-    if( type == "null type")
-        return false;
-
-    if(!data->msgType)
-        data->msgType = new string(type);
-    else
-        *data->msgType = type;
-
-    return true;
-}
 
 
 /*

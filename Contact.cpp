@@ -6,13 +6,13 @@
 
 
 
-Contact::Contact():info(nullptr)
+Contact::Contact():info(nullptr), messages(nullptr)
 {
     info = new node();
 }
 
 
-Contact::Contact(const Contact &aCopy):info(nullptr)
+Contact::Contact(const Contact &aCopy):info(nullptr),messages(nullptr)
 {
     *this = aCopy;
 }
@@ -27,6 +27,19 @@ Contact& Contact::operator=(const Contact & contact)
         if(info)
             delete info;
         info = new node();
+        if(messages)
+            delete messages;
+
+        if(contact.messages)
+        {
+            messages = new vector<Message>;
+            for(auto it = contact.messages->begin(); it != contact
+            .messages->end(); it++)
+            {
+                for
+            }
+        }
+
 
 
     setName(contact.info->name);
@@ -44,6 +57,10 @@ Contact::~Contact()
     if(info)
         delete info;
     info = nullptr;
+
+    if(messages)
+        delete messages;
+    messages = nullptr;
 }
 
 ostream& operator<<(ostream &out, Contact &ct)
@@ -64,6 +81,14 @@ ostream& operator<<(ostream &out, Contact &ct)
 }
 
 
+bool Contact::addMessage(const Message * msg)
+{
+    if(!messages)
+        messages = new vector<Message>;
+    messages->push_back(*msg);
+
+    return true;
+}
 bool Contact::setName(const string *c_name)
 {
     if(!c_name)

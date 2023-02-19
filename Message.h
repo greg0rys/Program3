@@ -5,12 +5,14 @@
 #ifndef PROGRAM3_MESSAGE_H
 #define PROGRAM3_MESSAGE_H
 
-#include "Contact.h"
+
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <map>
+
+
 using namespace std;
 
 class Message
@@ -75,9 +77,7 @@ public:
     ~Message();
     bool setSender(const string &);
     bool setMsgType(const string &);
-    // use string class += on the contact tag
-    // the tag will be their preffered contact and also the message type
-    bool inheritMsgType(Contact &);
+
     bool setMsgContent(const string &);
     bool setMsgDate(const string &);
     bool setAllData(const map<int,string>&);

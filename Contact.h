@@ -14,6 +14,8 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "Message.h"
+
 using namespace std;
 
 class Contact
@@ -43,6 +45,7 @@ private:
     };
 
     node * info;
+    vector<Message> * messages;
 
 public:
     Contact();
@@ -53,9 +56,11 @@ public:
     bool setName(const string *);
     bool setType(const string *);
     bool setHandle(const string *);
+    bool addMessage(const Message *);
     void getName(string &);
     void getType(string &);
     void getHandle(string &);
+    size_t getMsgCount(){return messages->size();}
 
 };
 
