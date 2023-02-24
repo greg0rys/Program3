@@ -22,6 +22,7 @@ int main()
     m1->addMessage(*ms1);
     auto * m2 = new Contact(*m1);
     auto * ms2 = new Message(*ms1);
+    ms2->setSender(*gs);
     cout << m1->getMsgCount() << endl;
     cout << m2->getMsgCount() << endl;
     ms1->getSender(s1);

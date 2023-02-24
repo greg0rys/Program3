@@ -94,22 +94,8 @@ Message& Message::operator=(const Message &msg)
         return *this;
     }
 
-    map<int,string> msg_dt = msg.getAllData();
-    data = new message_data();
 
-    for(auto it = msg_dt.begin(); it != msg_dt.end(); it++)
-    {
-        int key = it->first;
-        if(key == 0)
-            data->sender = new string(it->second);
-        if(key == 1)
-            data->msgType = new string(it->second);
-        if(key == 2)
-            data->content = new string(it->second);
-        if(key == 3)
-            setMsgDate(it->second);
-    }
-
+    setAllData(msg.getAllData());
     isRead = msg.isRead;
     msgNum = msg.msgNum;
 
@@ -199,6 +185,7 @@ bool Message::getMsgDate(string & dt) const
     return true;
 }
 
+
 // class destructor
 Message::~Message()
 {
@@ -285,7 +272,7 @@ bool Message::setMsgDate(const std::string &new_date)
 
 /*
  * Set all data attributes of the message_data pointer in the class
- * @param &values an std::array with the values we wish to set our
+ * @param &values an std::map with the values we wish to set our
  * attributes too.
  */
 bool Message::setAllData(const map<int,string>& values)
@@ -299,6 +286,7 @@ bool Message::setAllData(const map<int,string>& values)
     {
         int key = it.first;
         string value = it.second;
+
         if(key == 0)
             data->sender = new string(value);
         if(key == 1)

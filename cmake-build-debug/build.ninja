@@ -67,6 +67,12 @@ build CMakeFiles/Program3.dir/driver.cpp.obj: CXX_COMPILER__Program3_Debug C$:/U
   OBJECT_DIR = CMakeFiles\Program3.dir
   OBJECT_FILE_DIR = CMakeFiles\Program3.dir
 
+build CMakeFiles/Program3.dir/msgTree.cpp.obj: CXX_COMPILER__Program3_Debug C$:/Users/shene/Desktop/WINTER23/CS261/Program3/msgTree.cpp || cmake_object_order_depends_target_Program3
+  DEP_FILE = CMakeFiles\Program3.dir\msgTree.cpp.obj.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles\Program3.dir
+  OBJECT_FILE_DIR = CMakeFiles\Program3.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Program3
@@ -75,7 +81,7 @@ build CMakeFiles/Program3.dir/driver.cpp.obj: CXX_COMPILER__Program3_Debug C$:/U
 #############################################
 # Link the executable Program3.exe
 
-build Program3.exe: CXX_EXECUTABLE_LINKER__Program3_Debug CMakeFiles/Program3.dir/Message.cpp.obj CMakeFiles/Program3.dir/Contact.cpp.obj CMakeFiles/Program3.dir/driver.cpp.obj
+build Program3.exe: CXX_EXECUTABLE_LINKER__Program3_Debug CMakeFiles/Program3.dir/Message.cpp.obj CMakeFiles/Program3.dir/Contact.cpp.obj CMakeFiles/Program3.dir/driver.cpp.obj CMakeFiles/Program3.dir/msgTree.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Program3.dir

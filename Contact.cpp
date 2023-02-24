@@ -94,6 +94,7 @@ bool Contact::addMessage(Message & msg)
 
     return true;
 }
+// todo update all sets to & not *
 bool Contact::setName(const string *c_name)
 {
     if(!c_name)
