@@ -86,7 +86,7 @@ public:
     bool getMsgContent( string &) const;
     bool getMsgDate( string &) const;
     map<int, string> getAllData() const;
-    int getMNum() {return msgNum;}
+    int getMNum() const {return msgNum;}
 
 
 

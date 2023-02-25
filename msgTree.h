@@ -13,6 +13,7 @@ class msgTree
 {
 private:
     typedef Message mssg;
+
     struct node
     {
         int key;
@@ -28,7 +29,7 @@ private:
             left = right = nullptr;
         }
 
-        node(const int &k, const Contact & ct, const mssg &ms)
+        node(const int& k, const Contact & ct, const mssg &ms)
         {
             key = k;
             sender = new Contact(ct);
@@ -36,6 +37,7 @@ private:
             left = right = nullptr;
         }
 
+         int& getKey() {return this->key;}
 
         ~node()
         {
@@ -43,7 +45,6 @@ private:
                 delete sender;
             if(msg)
                 delete msg;
-            key = 0;
             sender = nullptr;
             msg = nullptr;
             left = right = nullptr;
@@ -53,12 +54,16 @@ private:
     int height;
     node * root;
 
+    // use a static int as a counter to assign message nums
+     // saves space in case more than 1 tree is made.
+
     void inorderDisplay(node *);
-    node * insert(int &, node *&);
+    node * _insert(node *&, const Contact &, const Message &);
     map<int, Contact&> getMessageByContact(string &);
-    bool searchByContact(const Contact &);
+    map<int, Message&> getMessagesByType(string &);
+    bool searchByContact(node *,int &, string &);
     bool searchByMsgNum(const int &);
-    bool searchbyMsgType(const string &);
+    bool searchbyMsgType(const string &, int &);
     void copyTree(node *&, node *);
     void destroy(node *&);
 public:
@@ -67,9 +72,11 @@ public:
     msgTree& operator=(const msgTree &);
     ~msgTree();
     bool destroy();
-    bool search();
+    bool search(int &, string &);
     bool insert(const Contact &, const mssg &);
     int& getCount() {return nodeCount;}
-    bool remove(mssg &); // use a ref to display deleted msg.
+    bool removeMsgNum(mssg &, int &); // use a ref to display deleted msg.
+    bool removeByContact(Contact &, int &);
+    bool removeByType(int &);
 };
 #endif //PROGRAM3_MSGTREE_H
