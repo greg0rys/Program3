@@ -5,78 +5,135 @@
 #ifndef PROGRAM3_MSGTREE_H
 #define PROGRAM3_MSGTREE_H
 #include "Contact.h"
-#include "helpers/input.cpp"
+class msgTree{
 
-// use the message num field as the key
-
-class msgTree
-{
-private:
-    typedef Message mssg;
-
-    struct node
+protected:
+    class node
     {
-        int key;
-        Contact * sender;
-        Message * msg;
+    private:
+        int key, height;
+        Contact *sender;
+        Message *msg;
         node *left, *right;
 
-        node()
+        void _destruct();
+        inline bool hasData()
         {
-            key = 0;
-            sender = nullptr;
-            msg = nullptr;
-            left = right = nullptr;
+            bool data = false;
+            if(sender || msg)
+                data = true;
+            return data;
         }
 
-        node(const int& k, const Contact & ct, const mssg &ms)
+    public:
+        typedef const Contact& c_cont;
+        typedef const Message& c_message;
+        typedef node* n_ptr;
+        node();
+        node(const int &, int, c_cont, c_message,
+             n_ptr = nullptr, n_ptr = nullptr);
+        node(const node &);
+        node& operator=(const node &);
+        ~node();
+        friend bool operator>(node & curr, Message& mess)
         {
-            key = k;
-            sender = new Contact(ct);
-            msg = new Message(ms);
-            left = right = nullptr;
+            return curr.getKey() > mess.getMNum();
         }
-
-         int& getKey() {return this->key;}
-
-        ~node()
+        friend bool operator<(node & curr, Message & mess)
         {
-            if(sender)
-                delete sender;
-            if(msg)
-                delete msg;
-            sender = nullptr;
-            msg = nullptr;
-            left = right = nullptr;
+            return curr.getKey() < mess.getMNum();
         }
+        void display();
+
+        // make sure to update all methods to check against nullptr;
+        [[maybe_unused]] void destroy();
+        inline Contact& getSender(){return *sender;}
+        inline Message& getMessage(){return *msg;}
+        inline int& getKey(){return key;}
+        inline int& getHeight(){return height;}
+        inline string& getSenderName(){return sender->getName();}
+        inline node*& getLeft(){return left;}
+        inline node*& getRight(){return right;}
+
     };
-    int nodeCount;
-    int height;
-    node * root;
 
-    // use a static int as a counter to assign message nums
-     // saves space in case more than 1 tree is made.
-
-    void inorderDisplay(node *);
-    node * _insert(node *&, const Contact &, const Message &);
-    map<int, Contact&> getMessageByContact(string &);
-    map<int, Message&> getMessagesByType(string &);
-    bool searchByContact(node *,int &, string &);
-    bool searchByMsgNum(const int &);
-    bool searchbyMsgType(const string &, int &);
-    void copyTree(node *&, node *);
-    void destroy(node *&);
 public:
+    typedef Message & mssg;
     msgTree();
     msgTree(const msgTree &);
     msgTree& operator=(const msgTree &);
     ~msgTree();
-    bool destroy();
     bool search(int &, string &);
-    bool insert(const Contact &, const mssg &);
-    int& getCount() {return nodeCount;}
+    bool insert(const Contact &,  mssg &);
     bool removeMsgNum(mssg &, int &); // use a ref to display deleted msg.
     bool removeByContact(Contact &, int &);
     bool removeByType(int &);
+    void printOrdered();
+    inline int& getCount(){return nodeCount;}
+    map<int, Contact&> getMessageByContact(string &);
+    map<int, Message&> getMessagesByType(string &);
+
+
+
+private:
+    int nodeCount;
+    int height;
+    node * root;
+
+    void inorderDisplay(node *);
+    node * _insert(node *&, const Contact &, const Message &);
+    void getContactsMap(map<int, Contact&> &, node *, string &, int &);
+    void getTypeMap(map<int, Message&> &, node *, int &, string &);
+    bool searchByContact(node *,int &, string &);
+    bool searchByMsgNum(node *,const int &);
+    bool searchByMsgType(node *,const string &, int &);
+    void copyTree(msgTree::node *&, msgTree::node *);
+    void destroy(node *&);
+
 };
+
+inline void getSearchType(int & opt)
+{
+    cout << "What would you like to serach by? "
+         << "\n\t1.Contact\n\t2.Message Type.\n\t3. Message Number\n";
+    cout << "Enter choice: ";
+
+    cin >> opt;
+
+    bool valid = false;
+    if(opt == 1 || opt ==2 || opt == 3)
+        valid = true;
+
+    while(!valid)
+    {
+
+        cout << "Not a valid choice please please enter a valid choice\n";
+        cout << "What would you like to search by? "
+             << "\n\t1.Contact\n\t2.Message Type.\n\t3. Message Number\n";
+        cout << "Enter choice: ";
+        cin >> opt;
+        if(opt == 1 || opt ==2 || opt == 3)
+            valid = true;
+
+        cin.ignore(101,'\n');
+    }
+
+}
+inline void getInput(string & input)
+{
+    getline(cin,input);
+
+    while(input.empty())
+    {
+        cout << "Error empty inputs are not accepted: " << endl;
+        cout << "Please try again: ";
+        getline(cin,input);
+    }
+
+}
+inline void getInt(int & dest)
+{
+    cin >> dest;
+}
+
 #endif //PROGRAM3_MSGTREE_H

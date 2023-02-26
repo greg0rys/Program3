@@ -57,7 +57,7 @@ public:
     bool setType(const string *);
     bool setHandle(const string *);
     bool addMessage(Message &);
-    void getName(string &);
+    string& getName();
     void getType(string &);
     void getHandle(string &);
     size_t getMsgCount(){return messages->size();}

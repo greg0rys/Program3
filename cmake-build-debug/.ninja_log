@@ -1,7 +1,14 @@
 # ninja log v5
-3	366	6985359200449528	CMakeFiles/Program3.dir/Message.cpp.obj	10065bfeff15e69
 1	643	6984814737343808	CMakeFiles/Program3.dir/main.cpp.obj	9b7abe5c8b65f3ac
-2	296	6985354049150244	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
-22	719	6985351204010664	CMakeFiles/Program3.dir/Contact.cpp.obj	b5b371c327f2ba6a
-1	186	6989129250418149	build.ninja	d523bed93d1ad0c
-366	477	6985359201521170	Program3.exe	36fcf009a89bafc2
+4	846	6990828948446266	CMakeFiles/Program3.dir/Message.cpp.obj	10065bfeff15e69
+3	535	6990933905838886	CMakeFiles/Program3.dir/driver.cpp.obj	9b257a3b906fd443
+19	781	6990933908370915	CMakeFiles/Program3.dir/msgTree.cpp.obj	c7c3cf19119d8f64
+15	769	6990895245090402	CMakeFiles/Program3.dir/Contact.cpp.obj	b5b371c327f2ba6a
+1	186	6990831799901367	build.ninja	d523bed93d1ad0c
+781	1093	6990933911352323	Program3.exe	b702d01b8f185aa1
+3	694	6990935097045413	CMakeFiles/Program3.dir/msgTree.cpp.obj	c7c3cf19119d8f64
+695	961	6990935099436016	Program3.exe	b702d01b8f185aa1
+2	664	6990935544329547	CMakeFiles/Program3.dir/msgTree.cpp.obj	c7c3cf19119d8f64
+665	908	6990935546555587	Program3.exe	b702d01b8f185aa1
+3	639	6990935836979378	CMakeFiles/Program3.dir/msgTree.cpp.obj	c7c3cf19119d8f64
+640	894	6990935839370529	Program3.exe	b702d01b8f185aa1

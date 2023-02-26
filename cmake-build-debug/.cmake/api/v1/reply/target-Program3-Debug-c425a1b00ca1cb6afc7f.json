@@ -94,7 +94,8 @@
 			[
 				0,
 				3,
-				6
+				6,
+				8
 			]
 		},
 		{
@@ -160,6 +161,11 @@
 			"backtrace" : 1,
 			"path" : "helpers",
 			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "helpers/input.h",
+			"sourceGroupIndex" : 0
 		}
 	],
 	"type" : "EXECUTABLE"

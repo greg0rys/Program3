@@ -74,7 +74,7 @@ ostream& operator<<(ostream &out, Contact &ct)
         return out;
     string name, type, handle;
 
-    ct.getName(name);
+    name = ct.getName();
     ct.getType(type);
     ct.getHandle(handle);
 
@@ -132,11 +132,11 @@ bool Contact::setHandle(const string *c_handle)
 }
 
 
-void Contact::getName(string &c_name)
+string& Contact::getName()
 {
     if(!info->name)
-        return;
-    c_name = *info->name;
+        return (string &) "nullptr";
+    return *info->name;
 
 }
 
