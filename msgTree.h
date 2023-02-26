@@ -58,6 +58,7 @@ protected:
         {
             height = nHeight;
         }
+        inline void setKey(int nKey){key = nKey;}
 
     };
 
@@ -67,15 +68,18 @@ public:
     msgTree(const msgTree &);
     msgTree& operator=(const msgTree &);
     ~msgTree();
+    // the prompting for search type can be moved to phone class
     bool search(int &, string &);
     bool insert(const Contact &,  mssg &);
     bool removeMsgNum(mssg &, int &); // use a ref to display deleted msg.
     bool removeByContact(Contact &, int &);
     bool removeByType(int &);
     void printOrdered();
-    inline int& getCount(){return nodeCount;}
     map<int, Contact&> getMessageByContact(string &);
     map<int, Message&> getMessagesByType(string &);
+
+    inline int& getCount(){return nodeCount;}
+    inline int& getHeight(){return height;}
 
 
 
@@ -86,6 +90,10 @@ private:
 
     void inorderDisplay(node *);
     node * _insert(node *&, const Contact &, const Message &);
+    node * rightRotation(node *&);
+    node * leftRotation(node *&);
+    node * getSmallest(node *&);
+    node * removeNode(node *&, const int &);
     void getContactsMap(map<int, Contact&> &, node *, string &, int &);
     void getTypeMap(map<int, Message&> &, node *, int &, string &);
     bool searchByContact(node *,int &, string &);
@@ -98,6 +106,7 @@ private:
 
 };
 
+// inline class helpers
 inline void getSearchType(int & opt)
 {
     cout << "What would you like to serach by? "

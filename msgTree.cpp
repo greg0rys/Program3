@@ -117,7 +117,7 @@ void msgTree::node::display()
 /**
  * Default class constructor.
  */
-msgTree::msgTree():root(nullptr), nodeCount(0),height(0)
+msgTree::msgTree():nodeCount(0),height(0),root(nullptr)
 {
 }
 
@@ -126,7 +126,7 @@ msgTree::msgTree():root(nullptr), nodeCount(0),height(0)
  * Class copy constructor.
  * @param aCopy the tree we wish to copy.
  */
-msgTree::msgTree(const msgTree &aCopy):root(nullptr),nodeCount(0),height(0)
+msgTree::msgTree(const msgTree &aCopy): nodeCount(0),height(0),root(nullptr)
 {
     *this = aCopy;
 }
@@ -348,6 +348,7 @@ bool msgTree::insert(const Contact &ct, Message &msg)
 
     currentCount = nodeCount;
     root = _insert(root, ct, msg);
+    height = getHeight(root);
 
     return currentCount != nodeCount; // this call to get count if the node
     // was added should be +1 the current count making this return true.
@@ -380,21 +381,95 @@ msgTree::node* msgTree::_insert(msgTree::node *& head,
     int heightL = getHeight(head->getLeft());
     int heightR = getHeight(head->getRight());
     int newHeight = 1 + (heightL > heightR ? heightL : heightR);
+    node *& left = head->getLeft();
+    node *& right = head->getRight();
+    int currKey = head->getKey();
+    int msgKey = msg.getMNum();
+
     // update the height of newly added nodes ancestor
     head->setHeight(newHeight);
 
     // ensure tree stays balanced
+    // for AVL to be balanced its bf must be 0, 1, -1
     int bf = getBalanceFactor(head);
 
-    if(bf > 1 && head->getKey() < msg.getMNum())
+    // left + right subtree rotations
+    if(bf > 1 && (currKey > msgKey))
         return rightRotation(head);
-    if(bf < -1 && head->getKey() > msg.getMNum())
+    if(bf < -1 && (currKey < msgKey))
         return leftRotation(head);
 
-    if(bf > 1 && head->getLeft()->getKey())
+    // left subtree right node
+    if(bf > 1 && (left->getKey() < msgKey))
+    {
+        left = leftRotation(left);
+        return rightRotation(head);
+    }
+
+    if(bf < -1 && (right->getKey() > msgKey))
+    {
+        right = rightRotation(right);
+        return leftRotation(head);
+    }
+
     return head;
 }
 
+
+/**
+ * To maintain balance of the AVL at each insert / removal
+ * rotation of nodes in the right direction.
+ * @param curr - current spot in the tree
+ * @return
+ */
+msgTree::node * msgTree::rightRotation(node *& curr)
+{
+    int currHeight;
+    int rotationHeight;
+    node * left = curr->getLeft();
+    node * leftRight = left->getRight();
+
+    left->getRight() = left;
+    left->getLeft() = leftRight;
+
+    currHeight = max(getHeight(curr->getLeft()),
+                     getHeight(curr->getRight())) + 1;
+    rotationHeight = max(getHeight(left->getLeft()),
+                          getHeight(left->getRight())) + 1;
+    curr->setHeight(currHeight);
+    left->setHeight(rotationHeight);
+
+    return left;
+}
+
+
+/**
+ * To keep the AVL in balance at each insertion / deletion
+ * rotation of nodes in the left direction
+ * @param curr - the current spot in the tree
+ * @return
+ */
+msgTree::node* msgTree::leftRotation(node *& curr)
+{
+    int currHeight;
+    int rotationHeight;
+
+    node * right = curr->getRight();
+    node * rightLeft = right->getLeft();
+
+    right->getLeft() = curr;
+    curr->getRight() = rightLeft;
+
+    currHeight = max(getHeight(curr->getLeft()),
+                     getHeight(curr->getRight())) + 1;
+    rotationHeight = max(getHeight(right->getLeft()),
+                         getHeight(right->getRight())) + 1;
+    curr->setHeight(currHeight);
+    right->setHeight(rotationHeight);
+
+    return right;
+
+}
 
 map<int, Contact&> msgTree::getMessageByContact(string & cName)
 {
@@ -455,12 +530,91 @@ void msgTree::getTypeMap(map<int, Message &> & mp, msgTree::node * curr, int
     else
         getTypeMap(mp,curr->getLeft(), counter, mType);
 }
+
+/**
+ * the smallest node in a BST is always the leftmost leaf node
+ * @param curr
+ * @return
+ */
+msgTree::node* msgTree::getSmallest(node *& curr)
+{
+    node * temp = curr;
+
+    while(temp->getLeft())
+        temp = temp->getLeft();
+    return temp;
+}
+
+msgTree::node* msgTree::removeNode(node *& curr, const int & key)
+{
+    if(!curr) return curr;
+    int currKey = curr->getKey();
+
+    if(currKey > key)
+        curr->getLeft() = removeNode(curr->getLeft(), key);
+    else if(currKey < key)
+        curr->getRight() = removeNode(curr->getRight(), key);
+    else
+    {
+        node *& left = curr->getLeft();
+        node *& right = curr->getRight();
+        node * temp = nullptr;
+
+        if(!left || !right)
+        {
+            temp = left ? left : right;
+
+            if(!temp)
+            {
+                temp = curr;
+                curr = nullptr;
+            }
+            else *curr = *temp;
+
+            delete temp;
+        }
+        else
+        {
+            temp = getSmallest(right);
+            curr->setKey(temp->getKey());
+            right = removeNode(right, temp->getKey());
+        }
+    }
+
+    if(!curr) return curr;
+    node *& left = curr->getLeft();
+    node *& right = curr->getRight();
+    int currHeight = 1 + max(getHeight(left),
+                             getHeight(right));
+    int bf;
+    curr->setHeight(currHeight);
+    bf = getBalanceFactor(curr);
+
+    // handle rotations needed after delete
+    if(bf > 1 && getBalanceFactor(left) >= 0)
+        return rightRotation(curr);
+    if(bf > 1 && getBalanceFactor(left) < 0)
+    {
+        left = leftRotation(left);
+        return rightRotation(curr);
+    }
+
+    if(bf < - 1 && getBalanceFactor(right) <= 0)
+        return leftRotation(curr);
+    if(bf < -1 && getBalanceFactor(right) > 0)
+    {
+        right = rightRotation(right);
+        return leftRotation(curr);
+    }
+
+    return curr;
+}
+
 bool msgTree::removeMsgNum(mssg & dest, int & msgNum)
 {
     cout << "remove" << endl;
     return true;
 }
-
 
 bool msgTree::removeByContact(Contact & dest, int &)
 {
@@ -489,7 +643,8 @@ void msgTree::inorderDisplay(msgTree::node * head)
     if(!head) return;
     inorderDisplay(head->getLeft());
     inorderDisplay(head->getRight());
-    cout << head->getSender() << endl;
+    cout << head->getSender().getName() << endl;
+
 }
 
 

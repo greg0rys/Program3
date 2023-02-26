@@ -3,60 +3,52 @@
 //
 
 #include "msgTree.h"
+void test()
+{
+    auto * ms = new msgTree();
+    string names[] = {"greg","marcos","dexter","rocko"};
+    string ctype[] ={"facebook", "twitter", "reddit", "insta"};
+    string chandle[] = {"@gs","@mv", "@ds", "@rs"};
+    string content[] = {"g","m","d","r"};
+    Contact ct;
+    Message mess;
+    for(auto x = 0; x < 4; x++)
+    {
+        string name = names[x];
+        string type = ctype[x];
+        string handle = chandle[x];
+        string mss = content[x];
 
+
+        ct.setName(&name);
+        ct.setType(&type);
+        ct.setHandle(&handle);
+
+        mess.setSender(name);
+        mess.setMsgType(type);
+        mess.setMsgContent(mss);
+
+        ms->insert(ct,mess);
+
+    }
+
+    auto * t2 = new msgTree(*ms);
+    t2->insert(ct,mess);
+    t2->printOrdered();
+    cout << "\t total nodes: " << t2->getCount() << endl;
+    cout << ms << "\t" << t2 << endl;
+    ms->printOrdered();
+    cout << "\t total nodes: " << ms->getCount();
+
+    cout << "\nTotal heights:\n\t";
+    cout << "ms: " << ms->getHeight() << "\t t2: " << t2->getHeight() << endl;
+
+    delete ms;
+    delete t2;
+
+}
 int main()
 {
-    msgTree *n = new msgTree();
-    Contact * c1 = new Contact();
-    string l = "greg";
-    c1->setName(&l);
-    Message * m1 = new Message();
-    m1->setSender(l);
-    n->insert(*c1,*m1);
-    int match = 0;
-    cout << m1->getMNum();
-    string buffer;
-    if(n->search(match, buffer))
-        cout << "found" << endl;
-    else
-        cout << "none " << endl;
-
-    if(match > 0)
-        cout << "found greg";
-    cout << n->getCount() << endl;
-//    auto * gs = new string("GREG");
-//    auto * m1 = new Contact();
-//    m1->setName(gs);
-
-
-//
-//
-//
-//    cout << "MSG TEST:\n";
-//    auto * ms1 = new Message();
-//    string s1, s2;
-//    s1 = "chynaa";
-//    ms1->setSender(s1);
-//    m1->addMessage(*ms1);
-//    auto * m2 = new Contact(*m1);
-//    auto * ms2 = new Message(*ms1);
-//    ms2->setSender(*gs);
-//    cout << m1->getMsgCount() << endl;
-//    cout << m2->getMsgCount() << endl;
-//    ms1->getSender(s1);
-//    ms2->getSender(s2);
-//
-//
-//
-//    cout << s1 << "\t" << s2 << endl;
-//    cout << m1 <<"\t"<< m2 << endl;
-//
-//    delete ms1;
-//    delete ms2;
-//    delete m1;
-//    delete m2;
-//    delete gs;
-
-
+    test();
     return 0;
 }
