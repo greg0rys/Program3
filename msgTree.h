@@ -146,6 +146,7 @@ inline void getInput(string & input)
     }
 
 }
+// get int
 inline void getInt(int & dest)
 {
     cin >> dest;
