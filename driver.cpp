@@ -8,7 +8,10 @@ int main()
 {
     msgTree *n = new msgTree();
     Contact * c1 = new Contact();
+    string l = "greg";
+    c1->setName(&l);
     Message * m1 = new Message();
+    m1->setSender(l);
     n->insert(*c1,*m1);
     int match = 0;
     cout << m1->getMNum();
@@ -17,6 +20,9 @@ int main()
         cout << "found" << endl;
     else
         cout << "none " << endl;
+
+    if(match > 0)
+        cout << "found greg";
     cout << n->getCount() << endl;
 //    auto * gs = new string("GREG");
 //    auto * m1 = new Contact();

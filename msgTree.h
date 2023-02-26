@@ -54,6 +54,10 @@ protected:
         inline string& getSenderName(){return sender->getName();}
         inline node*& getLeft(){return left;}
         inline node*& getRight(){return right;}
+        inline void setHeight(int nHeight)
+        {
+            height = nHeight;
+        }
 
     };
 
@@ -89,6 +93,8 @@ private:
     bool searchByMsgType(node *,const string &, int &);
     void copyTree(msgTree::node *&, msgTree::node *);
     void destroy(node *&);
+    static int getHeight(node *);
+    static int getBalanceFactor(node *);
 
 };
 
@@ -121,7 +127,7 @@ inline void getSearchType(int & opt)
 }
 inline void getInput(string & input)
 {
-    getline(cin,input);
+    cin >> input;
 
     while(input.empty())
     {

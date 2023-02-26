@@ -10,7 +10,7 @@
 /**
  * Default constructor
  */
-msgTree::node::node():key(0),height(0),sender(nullptr),msg(nullptr),
+msgTree::node::node():key(0),height(1),sender(nullptr),msg(nullptr),
                       left(nullptr),right(nullptr)
 {}
 
@@ -40,7 +40,7 @@ msgTree::node::node(const int & key, int height,
 }
 
 
-msgTree::node::node(const node & copy): key(0),height(0),
+msgTree::node::node(const node & copy): key(0),height(1),
                                         sender(nullptr),msg(nullptr),
                                         left(nullptr),right(nullptr)
 {
@@ -184,6 +184,23 @@ msgTree::~msgTree()
 }
 
 
+int msgTree::getHeight(node * curr)
+{
+    if(!curr)
+        return 0;
+
+    return curr->getHeight();
+}
+
+
+int msgTree::getBalanceFactor(node * curr)
+{
+    if(!curr) return 0;
+    return getHeight(curr->getLeft()) - getHeight(curr->getRight());
+}
+
+
+
 /**
  * Recurse this Binary tree in order to delete all nodes in the tree.
  * @param tRoot the root of the binary tree
@@ -253,31 +270,32 @@ bool msgTree::search(int & matches, string &buffer)
  */
 bool msgTree::searchByContact(node * head, int &matches, string &cName)
 {
-    static bool found = false;
+
     if(!head)
         return false;
 
-  string & senderName = head->getSenderName();
+  string  senderName = head->getSenderName();
     if(senderName == cName)
     {
         matches++;
-        found = true;
+        return true;
     }
 
     // search left if sender is greater than cName
     if(senderName > cName)
-        found = searchByContact(head->getLeft(), matches, cName);
-    else
-        found = searchByContact(head->getRight(), matches, cName);
+        return searchByContact(head->getLeft(), matches, cName);
 
-    return found;
+
+    return searchByContact(head->getRight(), matches, cName);
+
+
 
 }
 
 
 bool msgTree::searchByMsgType(node * curr,const string & mType, int & matches)
 {
-    static bool found = false;
+
     if(!curr) return false;
     Message & currMessage = curr->getMessage();
     string messType;
@@ -286,21 +304,20 @@ bool msgTree::searchByMsgType(node * curr,const string & mType, int & matches)
      if(messType == mType)
      {
          matches++;
-         found = true;
+         return true;
      }
 
      if(messType > mType)
-         found = searchByMsgType(curr->getLeft(), mType, matches);
-     else
-         found = searchByMsgType(curr->getRight(), mType, matches);
-     return found;
+        return searchByMsgType(curr->getLeft(), mType, matches);
+     return searchByMsgType(curr->getRight(), mType, matches);
+
 
 }
 
 
 bool msgTree::searchByMsgNum(node * curr, const int &mNum)
 {
-    static bool found = false;
+
     if(!curr) return false;
     int currMessNum = curr->getMessage().getMNum();
     if(currMessNum == mNum)
@@ -309,11 +326,10 @@ bool msgTree::searchByMsgNum(node * curr, const int &mNum)
     }
 
     if(currMessNum > mNum)
-        found = searchByMsgNum(curr->getLeft(), mNum);
-    else
-        found = searchByMsgNum(curr->getRight(), mNum);
+        return searchByMsgNum(curr->getLeft(), mNum);
+    return searchByMsgNum(curr->getRight(), mNum);
 
-    return found;
+
 }
 
 
@@ -361,6 +377,21 @@ msgTree::node* msgTree::_insert(msgTree::node *& head,
     else
         head->getRight() = _insert(head->getRight(), cont, msg);
 
+    int heightL = getHeight(head->getLeft());
+    int heightR = getHeight(head->getRight());
+    int newHeight = 1 + (heightL > heightR ? heightL : heightR);
+    // update the height of newly added nodes ancestor
+    head->setHeight(newHeight);
+
+    // ensure tree stays balanced
+    int bf = getBalanceFactor(head);
+
+    if(bf > 1 && head->getKey() < msg.getMNum())
+        return rightRotation(head);
+    if(bf < -1 && head->getKey() > msg.getMNum())
+        return leftRotation(head);
+
+    if(bf > 1 && head->getLeft()->getKey())
     return head;
 }
 
