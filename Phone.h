@@ -44,8 +44,8 @@ public:
     Phone& operator-=(Message &);
 
     void displayContacts();
-    void displayMessages();
-    void displayMessageList();
+    bool search();
+    void searchMenu(int &);
 
 
 

@@ -30,8 +30,11 @@ void test()
         mess.setMsgType(type);
         mess.setMsgContent(mss);
         ct1.push_back(ct);
+        cout << mess.getMNum() << endl;
         msg.push_back(mess);
         ms->insert(ct,mess);
+        if(x != 3)
+            mess.generateNewNum();
 
 
     }

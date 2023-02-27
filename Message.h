@@ -68,7 +68,7 @@ private:
     int msgNum;          // The number of this message in users inbox.
 
     void destroy(){if(data) delete data;}
-    static int generateMsgNum(){return (rand() % 1500) + 1;}
+     int generateMsgNum(){return rand() % 1500 + 1;}
 
 public:
     Message();
@@ -87,6 +87,7 @@ public:
     bool getMsgDate( string &) const;
     map<int, string> getAllData() const;
     int getMNum() const {return msgNum;}
+    void generateNewNum(){msgNum = generateMsgNum();}
 
 
 

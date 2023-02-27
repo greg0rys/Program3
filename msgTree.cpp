@@ -160,6 +160,16 @@ msgTree& msgTree::operator=(const msgTree &copy)
     return *this;
 }
 
+/**
+ * Overloaded post decremenant on the class will decrease the node count;
+ * @return
+ */
+msgTree& msgTree::operator-=(int num)
+{
+    nodeCount -= num;
+    return *this;
+}
+
 
 /**
  * Recursively copy all the nodes in another tree.
@@ -574,6 +584,7 @@ msgTree::node* msgTree::removeNode(node *& curr, const int & key)
             else *curr = *temp;
 
             delete temp;
+
 
         }
         else

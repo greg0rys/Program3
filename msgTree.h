@@ -67,9 +67,13 @@ public:
     msgTree();
     msgTree(const msgTree &);
     msgTree& operator=(const msgTree &);
+    msgTree& operator-=(int);
     ~msgTree();
     // the prompting for search type can be moved to phone class
     bool search(int &, string &);
+    bool searchForContact(const string &);
+    bool searchForMsgNum(const int &);
+    bool searchForMsgType(const string &);
     bool insert(const Contact &,  mssg &);
     bool removeMsgNum(int &); // use a ref to display deleted msg.
     bool removeByContact(Contact &, int &);
@@ -78,7 +82,9 @@ public:
     void getMessageByContact(map<int,Contact&> &, string &);
     map<int, Message&> getMessagesByType(string &);
     void getContact(Contact &);
-    bool searchForContact(const string &);
+
+
+
     inline int& getCount(){return nodeCount;}
     inline int& getHeight(){return height;}
 
@@ -140,6 +146,7 @@ inline void getSearchType(int & opt)
 inline void getInput(string & input)
 {
     cin >> input;
+    cin.ignore(101,'\n');
 
     while(input.empty())
     {
