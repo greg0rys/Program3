@@ -471,18 +471,20 @@ msgTree::node* msgTree::leftRotation(node *& curr)
 
 }
 
-map<int, Contact&> msgTree::getMessageByContact(string & cName)
+
+
+void msgTree::getMessageByContact(map<int, Contact&> & mp, string & cName)
 {
-    map<int, Contact&> contacts_map;
+
     int counter = 0;
     if(!searchByContact(root, counter, cName))
-        return contacts_map; // check against empty map on return
+        return;
     else
     {
-        getContactsMap(contacts_map, root, cName, counter);
+        getContactsMap(mp, root, cName, counter);
     }
 
-    return contacts_map;
+
 }
 
 
@@ -572,6 +574,7 @@ msgTree::node* msgTree::removeNode(node *& curr, const int & key)
             else *curr = *temp;
 
             delete temp;
+
         }
         else
         {
@@ -610,16 +613,60 @@ msgTree::node* msgTree::removeNode(node *& curr, const int & key)
     return curr;
 }
 
-bool msgTree::removeMsgNum(mssg & dest, int & msgNum)
+bool msgTree::removeMsgNum(int & msgNum)
 {
     cout << "remove" << endl;
     return true;
 }
 
-bool msgTree::removeByContact(Contact & dest, int &)
+bool msgTree::removeByContact(Contact & dest, int &dt)
 {
-    cout << "Remove" << endl;
+
+    if(!searchByContact(root, dt, dest.getName()))
+    {
+        return false;
+    }
+    node * target = getContact(root,dest);
+    removeNode(target,dt);
     return true;
+}
+
+
+bool msgTree::searchForContact(const string & cName)
+{
+    if(!root)
+        return false;
+    int matches = 0;
+    return searchByContact(root, matches, (string &)cName);
+
+}
+
+msgTree::node* msgTree::getContact(node * head, Contact & target)
+{
+
+    if(!head) return head;
+
+    if(head->getSenderName() == target.getName())
+        return head;
+    if(head->getSenderName() > target.getName())
+        return getContact(head->getLeft(), target);
+    return getContact(head->getRight(), target);
+
+}
+
+
+void msgTree::getContact(Contact & dest)
+{
+    int matches = 0;
+    if(!searchByContact(root, matches,dest.getName()))
+    {
+        dest.setName((const string *)  "no matches");
+        return;
+    }
+
+    node * temp = getContact(root, dest);
+    dest = temp->getSender(); // we don't have to check for nullptr, because
+    // I already searched the tree and made sure the contact was in the tree.
 }
 
 bool msgTree::removeByType(int & matches)

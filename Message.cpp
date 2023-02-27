@@ -117,7 +117,7 @@ map<int, string> Message::getAllData() const
     if(!data)
         return msgDat;
    string from,type,cont,date;
-   getSender(from);
+   from = getSender();
    getMsgType(type);
    getMsgContent(cont);
    getMsgDate(date);
@@ -133,16 +133,12 @@ map<int, string> Message::getAllData() const
 }
 
 
-bool Message::getSender(string & from) const
+string& Message::getSender() const
 {
     if(!data->sender)
-    {
-        from = "null sender";
-        return false;
-    }
+        return (string &) "nullptr";
 
-    from = *(data->sender);
-    return true;
+    return *data->sender;
 }
 
 

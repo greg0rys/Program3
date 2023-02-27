@@ -81,7 +81,7 @@ public:
     bool setMsgContent(const string &);
     bool setMsgDate(const string &);
     bool setAllData(const map<int,string>&);
-    bool getSender( string &) const ;
+    string& getSender()  const ;
     bool getMsgType( string &) const;
     bool getMsgContent( string &) const;
     bool getMsgDate( string &) const;

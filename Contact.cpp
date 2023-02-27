@@ -80,7 +80,7 @@ ostream& operator<<(ostream &out, Contact &ct)
 
 
 
-    out << name << "\ntContact Method: " << type
+    out << name << "\n\tContact Method: " << type
         << "\n\tContact info: " << handle << endl;
     return out;
 }
@@ -99,6 +99,10 @@ bool Contact::setName(const string *c_name)
 {
     if(!c_name)
         return false;
+
+    if(!info)
+        info = new node();
+
     if(!info->name)
         info->name = new string(*c_name);
     else
@@ -112,6 +116,8 @@ bool Contact::setType(const string *c_type)
     if(!c_type)
         return false;
 
+    if(!info)
+        info = new node();
     if(!info->contact_type)
         info->contact_type = new string(*c_type);
     else
@@ -126,15 +132,23 @@ bool Contact::setHandle(const string *c_handle)
 {
     if(!c_handle)
         return false;
+
+    if(!info)
+        info = new node();
     if(!info->contact_handle)
         info->contact_handle = new string(*c_handle);
+    else
+    {
+        delete info->contact_handle;
+        info->contact_handle = new string(*c_handle);
+    }
     return true;
 }
 
 
 string& Contact::getName()
 {
-    if(!info->name)
+    if(!info->name || !info)
         return (string &) "nullptr";
     return *info->name;
 

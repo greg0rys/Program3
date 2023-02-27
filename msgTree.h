@@ -71,13 +71,14 @@ public:
     // the prompting for search type can be moved to phone class
     bool search(int &, string &);
     bool insert(const Contact &,  mssg &);
-    bool removeMsgNum(mssg &, int &); // use a ref to display deleted msg.
+    bool removeMsgNum(int &); // use a ref to display deleted msg.
     bool removeByContact(Contact &, int &);
     bool removeByType(int &);
     void printOrdered();
-    map<int, Contact&> getMessageByContact(string &);
+    void getMessageByContact(map<int,Contact&> &, string &);
     map<int, Message&> getMessagesByType(string &);
-
+    void getContact(Contact &);
+    bool searchForContact(const string &);
     inline int& getCount(){return nodeCount;}
     inline int& getHeight(){return height;}
 
@@ -94,6 +95,7 @@ private:
     node * leftRotation(node *&);
     node * getSmallest(node *&);
     node * removeNode(node *&, const int &);
+    node * getContact(node *,Contact &);
     void getContactsMap(map<int, Contact&> &, node *, string &, int &);
     void getTypeMap(map<int, Message&> &, node *, int &, string &);
     bool searchByContact(node *,int &, string &);
@@ -107,6 +109,7 @@ private:
 };
 
 // inline class helpers
+// will move to phoneClass
 inline void getSearchType(int & opt)
 {
     cout << "What would you like to serach by? "
@@ -146,7 +149,6 @@ inline void getInput(string & input)
     }
 
 }
-// get int
 inline void getInt(int & dest)
 {
     cin >> dest;
