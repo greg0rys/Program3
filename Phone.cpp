@@ -200,22 +200,3 @@ void Phone::displayContacts()
 }
 
 
-bool Phone::search()
-{
-    int option;
-    string cName;
-    int msgNum;
-    string mType;
-
-    searchMenu(option);
-
-    switch(option)
-    {
-        case 1:
-            cout << "Please enter a contact to search for: ";
-            getInput(cName);
-            return msgs->searchForContact(cName);
-
-        case 2:
-    }
-}
